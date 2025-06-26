@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Moedas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="currency-icon">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <h1>Conversor de Moedas</h1>
+            <p class="subtitle">Converta moedas em tempo real</p>
+        </div>
+
+        <!-- Mensagem de erro -->
+        {% if erro %}
+            <div class="flash-messages">
+                <div class="flash-message flash-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ erro }}
+                </div>
+            </div>
+        {% endif %}
+
+        <form method="post" id="converterForm">
+            <div class="form-group">
+                <label for="moeda_entrada">
+                    <i class="fas fa-coins"></i> Converter de:
+                </label>
+                <select name="moeda_entrada" id="moeda_entrada" required>
+                    <option value="BRL">🇧🇷 Real Brasileiro (BRL)</option>
+                    <option value="USD">🇺🇸 Dólar Americano (USD)</option>
+                    <option value="EUR">🇪🇺 Euro (EUR)</option>
+                    <option value="GBP">🇬🇧 Libra Esterlina (GBP)</option>
+                    <option value="JPY">🇯🇵 Iene Japonês (JPY)</option>
+                    <option value="CAD">🇨🇦 Dólar Canadense (CAD)</option>
+                    <option value="AUD">🇦🇺 Dólar Australiano (AUD)</option>
+                    <option value="CHF">🇨🇭 Franco Suíço (CHF)</option>
+                    <option value="BTC">₿ Bitcoin (BTC)</option>
+                    <option value="ETH">Ξ Ethereum (ETH)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="valor_digitado">
+                    <i class="fas fa-calculator"></i> Valor:
+                </label>
+                <input type="number" 
+                       name="valor_digitado" 
+                       id="valor_digitado" 
+                       step="0.01" 
+                       min="0.01" 
+                       placeholder="Digite o valor a converter"
+                       required>
+            </div>
+
+            <div class="form-group" style="position: relative;">
+                <button type="button" class="swap-button" onclick="swapCurrencies()">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                <label for="moeda_saida">
+                    <i class="fas fa-arrow-right"></i> Converter para:
+                </label>
+                <select name="moeda_saida" id="moeda_saida" required>
+                    <option value="USD">🇺🇸 Dólar Americano (USD)</option>
+                    <option value="BRL">🇧🇷 Real Brasileiro (BRL)</option>
+                    <option value="EUR">🇪🇺 Euro (EUR)</option>
+                    <option value="GBP">🇬🇧 Libra Esterlina (GBP)</option>
+                    <option value="JPY">🇯🇵 Iene Japonês (JPY)</option>
+                    <option value="CAD">🇨🇦 Dólar Canadense (CAD)</option>
+                    <option value="AUD">🇦🇺 Dólar Australiano (AUD)</option>
+                    <option value="CHF">🇨🇭 Franco Suíço (CHF)</option>
+                    <option value="BTC">₿ Bitcoin (BTC)</option>
+                    <option value="ETH">Ξ Ethereum (ETH)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="convert-button">
+                <i class="fas fa-sync-alt"></i>
+                Converter Agora
+            </button>
+        </form>
+
+        {% if valor_convertido is not none %}
+            <div class="result">
+                <h2>Valor Convertido</h2>
+                <div class="amount">
+                    {{ "{:,.2f}".format(valor_convertido).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                </div>
+                {% if cotacao %}
+                    <div class="rate">
+                        <i class="fas fa-chart-line"></i>
+                        Taxa: {{ "{:.4f}".format(cotacao).replace(".", ",") }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
